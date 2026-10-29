@@ -1,0 +1,3 @@
+{% extends 'network/base.html' %}
+{% block title %}Редактировать пост{% endblock %}
+{% block content %}<section class="edit-page"><div class="eyebrow">ТВОЯ СТЕНА</div><h1>Редактировать пост<span class="accent">.</span></h1><div class="composer-card"><form method="post" class="site-form">{% csrf_token %}<div class="form-field"><label for="id_text">Текст поста</label>{{ form.text }}{% for error in form.text.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div><div class="composer-bottom"><a class="text-link" href="{% url 'cabinet' %}">← Назад в кабинет</a><button class="button primary" type="submit">Сохранить изменения ↗</button></div></form></div></section>{% endblock %}

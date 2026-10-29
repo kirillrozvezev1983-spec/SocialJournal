@@ -1,0 +1,39 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Журнал{% endblock %} | ЧЕРНОВИК</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/site.js' %}" defer></script>
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">Ж</span><span>черновик<span class="brand-dot">.</span><small>твои мысли имеют значение</small></span></a>
+    <nav class="nav-links">
+        <a href="{% url 'home' %}">Главная</a>
+        <a href="{% url 'interesting' %}">Интересное</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'cabinet' %}">Мой кабинет</a>
+        {% else %}
+            <a href="{% url 'login' %}">Войти</a>
+            <a class="nav-join" href="{% url 'register' %}">Создать аккаунт</a>
+        {% endif %}
+    </nav>
+    <div class="top-actions">
+        <form action="{% url 'set_language' %}" method="post" class="language-form">
+            {% csrf_token %}<input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <select name="language" aria-label="Язык" onchange="this.form.submit()"><option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>RU</option><option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option></select>
+        </form>
+        <button class="theme-button" type="button" id="theme-toggle" aria-label="Сменить тему">◐</button>
+        {% if user.is_authenticated %}<form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="logout-button">Выйти ↗</button></form>{% endif %}
+    </div>
+</header>
+<main class="page-wrap">
+    {% if messages %}<div class="messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% block content %}{% endblock %}
+</main>
+<footer class="footer"><span>ЧЕРНОВИК © 2026</span><span>Место для мыслей, историй и людей.</span></footer>
+</body>
+</html>
